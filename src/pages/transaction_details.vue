@@ -18,16 +18,17 @@
   </div>
 </template>
 <script>
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { useRoute } from "vue-router";
 export default {
-  data() {
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+    store.dispatch("fetchTransaction", { id: route.params.id });
     return {
-      transaction: null,
+      transaction: computed(() => store.state.transaction),
     };
-  },
-  created() {
-    fetch(`http://localhost:3000/transactions/${this.$route.params.id}`)
-      .then((response) => response.json())
-      .then((data) => (this.transaction = data));
   },
 };
 </script>

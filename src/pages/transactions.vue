@@ -1,32 +1,33 @@
 <template lang="html">
-  <div class="title">
-    <div>This is Transaction Page</div>
-    <router-link :to="{ name: 'transaction_adds' }"
-      ><button>Add</button></router-link
-    >
-  </div>
-  <div class="item" v-for="transaction in transactions" :key="transaction.id">
-    <router-link
-      :to="{
-        name: 'transaction_details',
-        params: { id: transaction.id },
-      }"
-      >{{ transaction.name }}
-    </router-link>
-    <div class="price">{{ transaction.price }}</div>
+  <div>
+    <div class="title">
+      <div>This is Transaction Page</div>
+      <router-link :to="{ name: 'transaction_adds' }"
+        ><button>Add</button></router-link
+      >
+    </div>
+    <div class="item" v-for="transaction in transactions" :key="transaction.id">
+      <router-link
+        :to="{
+          name: 'transaction_details',
+          params: { id: transaction.id },
+        }"
+        >{{ transaction.name }}
+      </router-link>
+      <div class="price">{{ transaction.price }}</div>
+    </div>
   </div>
 </template>
 <script>
+import { useStore } from "vuex";
+import { computed } from "vue";
 export default {
-  data() {
-    return {
-      transactions: [],
-    };
-  },
-  created() {
-    fetch("http://localhost:3000/transactions")
-      .then((response) => response.json())
-      .then((data) => (this.transactions = data));
+  setup() {
+    const store = useStore();
+    store.dispatch("fetchAllTransactions");
+    const transactions = computed(() => store.state.transactions);
+    const error = computed(() => store.state.error);
+    return { transactions, error };
   },
 };
 </script>
