@@ -1,24 +1,16 @@
 <template>
-  <base-nav></base-nav>
-  <router-view></router-view>
+  <component :is="layout"><router-view></router-view></component>
 </template>
-
 <script>
-import Nav from "./components/Nav.vue";
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+import { DEFAULT_LAYOUT } from "@/constants";
 export default {
-  name: "App",
-  components: {
-    BaseNav: Nav,
+  setup() {
+    const route = useRoute();
+    return {
+      layout: computed(() => (route.meta.layout || DEFAULT_LAYOUT) + "-layout"),
+    };
   },
 };
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

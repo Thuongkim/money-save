@@ -4,7 +4,20 @@
   </div>
 </template>
 <script>
-export default {};
+import fireStore from "../configs/firebase";
+import { collection, getDocs } from "firebase/firestore/lite";
+export default {
+  setup() {
+    async function getCities() {
+      const citiesCol = collection(fireStore, "transactions");
+      const citySnapshot = await getDocs(citiesCol);
+      const cityList = citySnapshot.docs.map((doc) => doc.data());
+      console.log(cityList);
+      return cityList;
+    }
+    getCities();
+  },
+};
 </script>
 <style lang=""></style>
 <!-- <template lang="html">

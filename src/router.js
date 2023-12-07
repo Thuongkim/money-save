@@ -15,6 +15,9 @@ const routes = [
   {
     path: "/transactions",
     component: Transactions,
+    meta: {
+      layout: "auth",
+    },
     name: "transactions",
   },
   {
