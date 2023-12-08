@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "./pages/home.vue";
 import Transactions from "./pages/transactions.vue";
 import TransactionDetails from "./pages/transaction_details.vue";
 import TransactionEdits from "./pages/transaction_edits.vue";
@@ -9,8 +8,26 @@ import NotFound from "./pages/not_found.vue";
 const routes = [
   {
     path: "/",
-    component: Home,
+    component: () => import(/* webpackChunkName: "home" */ "./pages/home.vue"),
     name: "overview",
+  },
+  {
+    path: "/register",
+    component: () =>
+      import(/* webpackChunkName: "register" */ "./pages/register.vue"),
+    name: "register",
+    meta: {
+      layout: "auth",
+    },
+  },
+  {
+    path: "/login",
+    component: () =>
+      import(/* webpackChunkName: "login" */ "./pages/login.vue"),
+    name: "login",
+    meta: {
+      layout: "auth",
+    },
   },
   {
     path: "/transactions",
