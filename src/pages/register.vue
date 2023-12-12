@@ -2,7 +2,10 @@
   <div class="mt-8">
     <div class="container mx-auto px-8">
       <!-- Start form -->
-      <form class="flex flex-col justify-start space-y-6">
+      <form
+        class="flex flex-col justify-start space-y-6"
+        @submit.prevent="onRegister()"
+      >
         <div class="row">
           <label class="flex flex-col" for="fullName">
             <span>Full Name</span>
@@ -11,6 +14,7 @@
               class="px-4 py-3 rounded-lg mt-1 border border-gray-100"
               type="text"
               placeholder="Full name"
+              v-model="fullName"
             />
           </label>
         </div>
@@ -22,6 +26,7 @@
               class="px-4 py-3 rounded-lg mt-1 border border-gray-100"
               type="email"
               placeholder="Email Address"
+              v-model="email"
             />
           </label>
         </div>
@@ -33,17 +38,24 @@
               class="px-4 py-3 rounded-lg mt-1 border border-gray-100"
               type="password"
               placeholder="Password"
+              v-model="password"
             />
           </label>
         </div>
         <div class="row">
           <button
+            type="submit"
             class="py-3 text-center w-full bg-primary text-white rounded-lg font-bold"
           >
-            Sign up
+            {{ isPending ? "Loading..." : "Sign up" }}
           </button>
         </div>
       </form>
+
+      <!-- Start error -->
+      <div v-if="error" class="text-center text-red mt-4">
+        <span>{{ error }}</span>
+      </div>
 
       <!-- Start text -->
       <div class="w-full text-center mt-6">
@@ -58,9 +70,21 @@
   </div>
 </template>
 <script>
-import { firebaseStore, firebaseAuth, timestamp } from "@/configs/firebase";
+import { ref } from "vue";
+import { useSignUp } from "@/composables/useSignUp";
+
+// import { firebaseStore, firebaseAuth, timestamp } from "@/configs/firebase";
 export default {
-  setup() {},
+  setup() {
+    const { error, isPending, signUp } = useSignUp();
+    const fullName = ref("");
+    const email = ref("");
+    const password = ref("");
+    async function onRegister() {
+      await signUp(email.value, password.value, fullName.value);
+    }
+    return { fullName, email, password, error, isPending, onRegister };
+  },
 };
 </script>
 <style lang=""></style>
