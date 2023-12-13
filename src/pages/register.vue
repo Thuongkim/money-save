@@ -72,16 +72,21 @@
 <script>
 import { ref } from "vue";
 import { useSignUp } from "@/composables/useSignUp";
+import { useRouter } from "vue-router";
 
 // import { firebaseStore, firebaseAuth, timestamp } from "@/configs/firebase";
 export default {
   setup() {
+    const router = useRouter();
     const { error, isPending, signUp } = useSignUp();
     const fullName = ref("");
     const email = ref("");
     const password = ref("");
     async function onRegister() {
       await signUp(email.value, password.value, fullName.value);
+      if (!error.value) {
+        router.push({ name: "home" });
+      }
     }
     return { fullName, email, password, error, isPending, onRegister };
   },

@@ -1,21 +1,16 @@
 <template lang="html">
   <div>
     <h1>overview</h1>
+    <h2 v-if="user">{{ user.displayName }}</h2>
   </div>
 </template>
 <script>
-import fireStore from "../configs/firebase";
-import { collection, getDocs } from "firebase/firestore/lite";
+import { useUser } from "@/composables/useUser";
 export default {
   setup() {
-    async function getCities() {
-      const citiesCol = collection(fireStore, "transactions");
-      const citySnapshot = await getDocs(citiesCol);
-      const cityList = citySnapshot.docs.map((doc) => doc.data());
-      console.log(cityList);
-      return cityList;
-    }
-    getCities();
+    const { getUser } = useUser();
+    const { user } = getUser();
+    return { user };
   },
 };
 </script>
