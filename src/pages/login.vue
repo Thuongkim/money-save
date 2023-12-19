@@ -72,7 +72,7 @@ export default {
     async function onSignIn() {
       await signIn(email.value, password.value);
       if (!error.value) {
-        router.push({ name: "home" });
+        router.push({ name: "profile" });
       }
     }
     return { email, password, error, isPending, onSignIn };

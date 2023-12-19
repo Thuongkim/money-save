@@ -4,6 +4,16 @@ import TransactionDetails from "./pages/transaction_details.vue";
 import TransactionEdits from "./pages/transaction_edits.vue";
 import TransactionAdds from "./pages/transaction_adds.vue";
 import NotFound from "./pages/not_found.vue";
+import { firebaseAuth } from "./configs/firebase";
+
+const requireAuth = (to, from, next) => {
+  const user = firebaseAuth.currentUser;
+  if (user) {
+    next();
+  } else {
+    next({ name: "login" });
+  }
+};
 
 const routes = [
   {
@@ -28,6 +38,19 @@ const routes = [
     meta: {
       layout: "auth",
     },
+  },
+  {
+    path: "/profile",
+    component: () =>
+      import(/* webpackChunkName: "profile" */ "./pages/profile.vue"),
+    name: "profile",
+    beforeEnter: requireAuth,
+  },
+  {
+    path: "/logout",
+    component: () =>
+      import(/* webpackChunkName: "logout" */ "./pages/logout.vue"),
+    name: "logout",
   },
   {
     path: "/transactions",

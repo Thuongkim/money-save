@@ -5,9 +5,16 @@ import store from "./store";
 import "./assets/styles/tailwind.css";
 import "./assets/styles/global.css";
 import { registerGlobalComponents } from "@/utils/import";
+import { firebaseAuth } from "./configs/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
-const app = createApp(App);
-registerGlobalComponents(app);
-app.use(router);
-app.use(store);
-app.mount("#app");
+let app;
+onAuthStateChanged(firebaseAuth, () => {
+  if (!app) {
+    app = createApp(App);
+    registerGlobalComponents(app);
+    app.use(router);
+    app.use(store);
+    app.mount("#app");
+  }
+});
